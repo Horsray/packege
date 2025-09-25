@@ -22,6 +22,11 @@ RequestExecutionLevel admin
 !define OUT_FILENAME    "${APP_NAME_FILE}_${APP_VERSION}.exe"
 !define INSTALLER_ICON "__INSTALLER_ICON__"
 
+!if "${INSTALLER_ICON}" != ""
+  !define MUI_ICON "${INSTALLER_ICON}"
+  !define MUI_UNICON "${INSTALLER_ICON}"
+!endif
+
 Name        "${APP_NAME}"
 OutFile     "${OUT_FILENAME}"
 !if "${INSTALLER_ICON}" != ""

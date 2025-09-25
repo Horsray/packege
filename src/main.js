@@ -157,7 +157,7 @@ async function buildWin({ pluginDir, name, version, outDir, installerFileName })
   try {
     await fs.promises.access(iconSrc, fs.constants.R_OK);
     await fse.copy(iconSrc, iconDst);
-    installerIcon = 'installer.ico';
+    installerIcon = iconDst;
   } catch (err) {
     log('warn', '未找到 installer.ico，将使用默认安装程序图标（' + (err?.message || err) + '）');
   }
