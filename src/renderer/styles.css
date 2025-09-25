@@ -1,0 +1,11 @@
+
+body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,PingFang SC,Microsoft YaHei,sans-serif;margin:0;background:#0f1115;color:#e6e6e6}
+.wrap{max-width:900px;margin:24px auto;padding:0 16px}
+h1{font-size:20px;margin:0 0 16px}
+.row{display:flex;align-items:center;gap:8px;margin:10px 0}
+.row label{width:120px;color:#bbb}
+.row input{flex:1;padding:8px;border:1px solid #333;border-radius:6px;background:#12151b;color:#e6e6e6}
+.row button{padding:8px 12px;border:0;background:#2f7cf6;color:#fff;border-radius:6px;cursor:pointer}
+.btns button{margin-right:8px}
+#log{height:220px;overflow:auto;background:#090b10;color:#a0c4ff;padding:10px;border-radius:6px}
+#log .error{color:#ff6b6b} #log .warn{color:#ffcc66} #log .success{color:#79e27b}

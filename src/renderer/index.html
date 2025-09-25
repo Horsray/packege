@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>双平台安装器</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./index.js" defer></script>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Photoshop 插件安装器打包</h1>
+      <div class="row">
+        <label>插件文件夹：</label>
+        <input
+          id="folder"
+          type="text"
+          readonly
+          placeholder="选择插件母文件夹（例如：绘影 AIGC-摄影）"
+        />
+        <button id="pick">选择</button>
+        <input id="dirPicker" type="file" webkitdirectory directory hidden />
+      </div>
+      <div class="row">
+        <label>显示名称：</label>
+        <input id="name" type="text" placeholder="默认用文件夹名" />
+      </div>
+      <div class="row">
+        <label>版本号：</label>
+        <input id="version" type="text" value="1.0.0" />
+      </div>
+      <div class="row">
+        <label>安装包文件名：</label>
+        <input
+          id="installerName"
+          type="text"
+          placeholder="留空则自动生成（例如：Setup-插件名-版本号.exe）"
+        />
+      </div>
+      <div class="row btns">
+        <button id="mac">打包 macOS（.pkg）</button>
+        <button id="win">打包 Windows（.exe）</button>
+        <button id="both">打包 两者</button>
+      </div>
+      <pre id="log"></pre>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "dual-installer-builder",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Visual tool to package Photoshop plugin into Windows (.exe) and macOS (.pkg) installers",
+  "main": "src/main.js",
+  "type": "module",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^29.3.0"
+  },
+  "dependencies": {
+    "fs-extra": "^11.2.0"
+  }
+}
