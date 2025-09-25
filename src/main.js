@@ -151,6 +151,16 @@ async function buildWin({ pluginDir, name, version, outDir, installerFileName })
   const srcCopy = path.join(work, 'payload');
   await fse.emptyDir(srcCopy);
   await fse.copy(pluginDir, srcCopy, { dereference: true });
+  let installerIcon = '';
+  const iconSrc = path.join(__dirname, '..', 'installer.ico');
+  const iconDst = path.join(work, 'installer.ico');
+  try {
+    await fs.promises.access(iconSrc, fs.constants.R_OK);
+    await fse.copy(iconSrc, iconDst);
+    installerIcon = 'installer.ico';
+  } catch (err) {
+    log('warn', '未找到 installer.ico，将使用默认安装程序图标（' + (err?.message || err) + '）');
+  }
   const payloadGlob = path.join(srcCopy, '*.*');
   let nsi = nsisT
     // 这些占位符在模板中已位于引号或 define 环境中，这里不要再额外加引号！
@@ -161,8 +171,8 @@ async function buildWin({ pluginDir, name, version, outDir, installerFileName })
     .replace(/__APP_NAME_WIN__/g, nsisEscape(appNameDisplay))   // 若模板使用，通常也在引号内
     .replace(/__APP_PUBLISHER__/g, nsisEscape(appPublisher))
     .replace(/__APP_DIRNAME__/g, nsisEscape(appDirName))
-    .replace(/__PAYLOAD_GLOB__/g, nsisEscape(payloadGlob));          // 模板里是 !define PAYLOAD_DIR __PAYLOAD_DIR__
-  console.log("Generated NSIS content:\n", nsi);  // 打印替换后的 nsi 内容
+    .replace(/__PAYLOAD_GLOB__/g, nsisEscape(payloadGlob))
+    .replace(/__INSTALLER_ICON__/g, nsisEscape(installerIcon));
 
   const defaultOutName = `${appNameFile}-${version}.exe`;
   const outName = resolveOutFileName(installerFileName, defaultOutName);
