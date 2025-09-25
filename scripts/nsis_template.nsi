@@ -60,6 +60,8 @@ Var _tmp
 Var PSCount
 Var PSFoundPath
 Var PSFoundNormalized
+Var PSTrimLen
+Var PSTrimChar
 
 ; ---------- 小宏：尝试读取注册表字符串 ----------
 !macro TRY_READ REGROOT SUBKEY VALUENAME
@@ -128,12 +130,13 @@ Function StoreFoundPath
   Push $1
 
   StrCpy $PSFoundNormalized $PSFoundPath
+
 TrimLoop:
-  StrLen $0 $PSFoundNormalized
-  IntCmp $0 0 TrimDone
-  StrCpy $1 $PSFoundNormalized 1 -1
-  StrCmp $1 "\\" TrimDrop 0
-  StrCmp $1 "/" TrimDrop 0
+  StrLen $PSTrimLen $PSFoundNormalized
+  IntCmp $PSTrimLen 0 TrimDone
+  StrCpy $PSTrimChar $PSFoundNormalized 1 -1
+  StrCmp $PSTrimChar "\\" TrimDrop 0
+  StrCmp $PSTrimChar "/" TrimDrop 0
   Goto TrimDone
 
 TrimDrop:
@@ -141,14 +144,14 @@ TrimDrop:
   Goto TrimLoop
 
 TrimDone:
+  Pop $1
+  Pop $0
   StrCmp $PSFoundNormalized "" Restore
 
   Push $PSFoundNormalized
   IntOp $PSCount $PSCount + 1
 
 Restore:
-  Pop $1
-  Pop $0
   StrCpy $_found ""
 FunctionEnd
 Function PreInstallConfirm
