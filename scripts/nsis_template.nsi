@@ -62,6 +62,7 @@ Var PSFoundPath
 Var PSFoundNormalized
 Var PSTrimLen
 Var PSTrimChar
+Var PSListFile
 
 ; ---------- 小宏：尝试读取注册表字符串 ----------
 !macro TRY_READ REGROOT SUBKEY VALUENAME
@@ -148,11 +149,55 @@ TrimDone:
   Pop $0
   StrCmp $PSFoundNormalized "" Restore
 
-  Push $PSFoundNormalized
-  IntOp $PSCount $PSCount + 1
+  Call RememberPath
 
 Restore:
   StrCpy $_found ""
+FunctionEnd
+Function RememberPath
+  StrCmp $PSFoundNormalized "" done
+
+  StrCpy $R0 $PSFoundNormalized
+  StrCpy $R1 0
+
+  IfFileExists "$PSListFile" 0 append
+  FileOpen $R2 "$PSListFile" r
+
+read_loop:
+  FileRead $R2 $R3
+  IfErrors close_read
+
+trim_line:
+  StrCmp $R3 "" compare_line
+  StrCpy $R4 $R3 1 -1
+  StrCmp $R4 "$\r" trim_drop 0
+  StrCmp $R4 "$\n" trim_drop 0
+  Goto compare_line
+
+trim_drop:
+  StrCpy $R3 $R3 -1
+  Goto trim_line
+
+compare_line:
+  StrCmp $R3 "" read_loop
+  StrCmp $R3 $R0 found 0
+  Goto read_loop
+
+found:
+  StrCpy $R1 1
+
+close_read:
+  FileClose $R2
+  StrCmp $R1 1 done
+
+append:
+  FileOpen $R2 "$PSListFile" a
+  FileWrite $R2 "$R0$\r$\n"
+  FileClose $R2
+  Push $R0
+  IntOp $PSCount $PSCount + 1
+
+done:
 FunctionEnd
 Function PreInstallConfirm
   ; 一个极简的 nsDialogs 页面，只有提示文本与“下一步”按钮
@@ -175,6 +220,10 @@ Function FindPhotoshop
   StrCpy $_found  ""
   StrCpy $_tmp    ""
   StrCpy $PSCount 0
+
+  InitPluginsDir
+  StrCpy $PSListFile "$PLUGINSDIR\photoshop_paths.txt"
+  Delete "$PSListFile"
 
   ; ===== 64-bit 视图 =====
   SetRegView 64
