@@ -9,8 +9,12 @@ Unicode True
 RequestExecutionLevel admin
 
 !include "MUI2.nsh"
+!include "LogicLib.nsh"
 !include "FileFunc.nsh"
 !include "nsDialogs.nsh"
+
+!insertmacro GetParent
+!insertmacro GetFullPathName
 
 ; ---------- 基本信息 ----------
 !define APP_NAME        "__APP_NAME__"
